@@ -11,22 +11,23 @@ fun main() {
 
     val reference = firebaseDatabase.getReference("youtube_data")
 
-    reference.child("yukihanaramili").addListenerForSingleValueEvent(object : ValueEventListener {
+//    reference.child("yukihanaramili").orderByChild("publishedAt")
 
-        override fun onDataChange(snapshot: DataSnapshot) {
+    reference.child("yukihanaramili").orderByChild("publishedAt")
+        .addListenerForSingleValueEvent(object : ValueEventListener {
 
-            for (child in snapshot.children) {
-                val activity = activityFormSnapshot(child)
-                println(activity)
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (child in snapshot.children) {
+                    val activity = activityFormSnapshot(child)
+                    println(activity.title)
+                }
+                countDownLatch.countDown()
             }
 
-            countDownLatch.countDown()
-        }
-
-        override fun onCancelled(error: DatabaseError) {
-            error.toException().printStackTrace()
-        }
-    })
+            override fun onCancelled(error: DatabaseError) {
+                error.toException().printStackTrace()
+            }
+        })
 
     countDownLatch.await()
 }
@@ -39,8 +40,8 @@ fun activityFormSnapshot(snapshot: DataSnapshot): Activity {
     return Activity(
         videoId = snapshot.child("videoId").value as String,
         description = snapshot.child("description").value as String,
-        publishedAt = snapshot.child("description").value as String,
-        thumbnail = snapshot.child("description").value as String,
-        title = snapshot.child("description").value as String,
+        publishedAt = snapshot.child("publishedAt").value as String,
+        thumbnail = snapshot.child("thumbnail").value as String,
+        title = snapshot.child("title").value as String,
     )
 }

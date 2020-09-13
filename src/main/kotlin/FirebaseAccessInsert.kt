@@ -1,7 +1,7 @@
 import java.time.LocalDateTime
 import java.util.concurrent.CountDownLatch
 
-val countDownLatch = CountDownLatch(1)
+private val countDownLatch = CountDownLatch(1)
 
 fun main() {
 
